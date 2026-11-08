@@ -36,9 +36,8 @@ MAIN MENU
 #define ID_MULTIPLAYER			11
 #define ID_SETUP				12
 #define ID_DEMOS				13
-//#define ID_CINEMATICS			14
-#define ID_CHALLENGES                   14
-#define ID_TEAMARENA		15
+#define ID_CINEMATICS			14
+#define ID_TEAMARENA			15
 #define ID_MODS					16
 #define ID_EXIT					17
 
@@ -53,13 +52,13 @@ typedef struct {
 	menutext_s		multiplayer;
 	menutext_s		setup;
 	menutext_s		demos;
-	//menutext_s		cinematics;
-        menutext_s              challenges;
+	menutext_s		cinematics;
+	menutext_s              challenges;
 	menutext_s		teamArena;
 	menutext_s		mods;
 	menutext_s		exit;
 
-	//qhandle_t		bannerModel;
+	qhandle_t		bannerModel;
 	qhandle_t		bannerLogo;
 } mainmenu_t;
 
@@ -119,13 +118,9 @@ void Main_MenuEvent (void* ptr, int event) {
 		UI_DemosMenu();
 		break;
 
-	/*case ID_CINEMATICS:
+	case ID_CINEMATICS:
 		UI_CinematicsMenu();
-		break;*/
-
-            case ID_CHALLENGES:
-                UI_Challenges();
-                break;
+		break;
 
 	case ID_MODS:
 		UI_ModsMenu();
@@ -150,7 +145,7 @@ MainMenu_Cache
 ===============
 */
 void MainMenu_Cache( void ) {
-	//s_main.bannerModel = trap_R_RegisterModel( MAIN_BANNER_MODEL );
+	s_main.bannerModel = trap_R_RegisterModel( MAIN_BANNER_MODEL );
 	s_main.bannerLogo = trap_R_RegisterShaderNoMip( "ratmod_menulogo_white" );
 
 }
@@ -170,62 +165,62 @@ TTimo: this function is common to the main menu and errorMessage menu
 */
 
 static void Main_MenuDraw( void ) {
-	//refdef_t		refdef;
-	//refEntity_t		ent;
-	//vec3_t			origin;
-	//vec3_t			angles;
-	//float			adjust;
-	//float			x, y, w, h;
+	refdef_t		refdef;
+	refEntity_t		ent;
+	vec3_t			origin;
+	vec3_t			angles;
+	float			adjust;
+	float			x, y, w, h;
 	vec4_t			color = {1.0, 1.0, 0, 1};
 
 	//// setup the refdef
 
-	//memset( &refdef, 0, sizeof( refdef ) );
+	memset( &refdef, 0, sizeof( refdef ) );
 
-	//refdef.rdflags = RDF_NOWORLDMODEL;
+	refdef.rdflags = RDF_NOWORLDMODEL;
 
-	//AxisClear( refdef.viewaxis );
+	AxisClear( refdef.viewaxis );
 
-	//x = 0;
-	//y = 0;
-	//w = 640;
-	//h = 120;
-	//UI_AdjustFrom640( &x, &y, &w, &h );
-	//refdef.x = x;
-	//refdef.y = y;
-	//refdef.width = w;
-	//refdef.height = h;
+	x = 0;
+	y = 0;
+	w = 640;
+	h = 120;
+	UI_AdjustFrom640( &x, &y, &w, &h );
+	refdef.x = x;
+	refdef.y = y;
+	refdef.width = w;
+	refdef.height = h;
 
-	//adjust = 0; // JDC: Kenneth asked me to stop this 1.0 * sin( (float)uis.realtime / 1000 );
-	//refdef.fov_x = 60 + adjust;
-	//refdef.fov_y = 19.6875 + adjust;
+	adjust = 0; // JDC: Kenneth asked me to stop this 1.0 * sin( (float)uis.realtime / 1000 );
+	refdef.fov_x = 60 + adjust;
+	refdef.fov_y = 19.6875 + adjust;
 
-	//refdef.time = uis.realtime;
+	refdef.time = uis.realtime;
 
-	//origin[0] = 300;
-	//origin[1] = 0;
-	//origin[2] = -32;
+	origin[0] = 300;
+	origin[1] = 0;
+	origin[2] = -32;
 
-	//trap_R_ClearScene();
+	trap_R_ClearScene();
 
 	//// add the model
 
-	//memset( &ent, 0, sizeof(ent) );
+	memset( &ent, 0, sizeof(ent) );
 
-	//adjust = 5.0 * sin( (float)uis.realtime / 5000 );
-	//VectorSet( angles, 0, 180 + adjust, 0 );
-	//AnglesToAxis( angles, ent.axis );
-	//ent.hModel = s_main.bannerModel;
-	//VectorCopy( origin, ent.origin );
-	//VectorCopy( origin, ent.lightingOrigin );
-	//ent.renderfx = RF_LIGHTING_ORIGIN | RF_NOSHADOW;
-	//VectorCopy( ent.origin, ent.oldorigin );
+	adjust = 5.0 * sin( (float)uis.realtime / 5000 );
+	VectorSet( angles, 0, 180 + adjust, 0 );
+	AnglesToAxis( angles, ent.axis );
+	ent.hModel = s_main.bannerModel;
+	VectorCopy( origin, ent.origin );
+	VectorCopy( origin, ent.lightingOrigin );
+	ent.renderfx = RF_LIGHTING_ORIGIN | RF_NOSHADOW;
+	VectorCopy( ent.origin, ent.oldorigin );
 
-	//trap_R_AddRefEntityToScene( &ent );
+	trap_R_AddRefEntityToScene( &ent );
 
-	//trap_R_RenderScene( &refdef );
+	trap_R_RenderScene( &refdef );
 
-	UI_DrawHandlePic( 320-60, 0, 120, 120, s_main.bannerLogo );
+	//UI_DrawHandlePic( 320-60, 0, 120, 120, s_main.bannerLogo );
 	
 	if (strlen(s_errorMessage.errorMessage))
 	{
@@ -238,11 +233,11 @@ static void Main_MenuDraw( void ) {
 	}
 
 		UI_DrawProportionalString( 320, 372, "", UI_CENTER|UI_SMALLFONT, color );
-		UI_DrawString( 320, 386, "RatArena(c) 2017-2023 Ratmod Team", UI_CENTER|UI_SMALLFONT, color );
-		UI_DrawString( 320, 400, "based on OpenArena(c) 2005-2012 OpenArena Team", UI_CENTER|UI_SMALLFONT, color );
-		UI_DrawString( 320, 414, "Ratmod/OpenArena comes with ABSOLUTELY NO WARRANTY; this is free software", UI_CENTER|UI_SMALLFONT, color );
-		UI_DrawString( 320, 428, "and you are welcome to redistribute it under certain conditions;", UI_CENTER|UI_SMALLFONT, color );
-		UI_DrawString( 320, 444, "read COPYING for details.", UI_CENTER|UI_SMALLFONT, color );
+		UI_DrawString( 320, 414, "RatArena-q3", UI_CENTER|UI_SMALLFONT, color );
+		UI_DrawString( 320, 428, "based on Ratmod and OpenArena(c) 2005-2017 Ratmod/OA Teams", UI_CENTER|UI_SMALLFONT, color );
+		UI_DrawString( 320, 444, "Quake III Arena(c) 1999-2000, Id Software, Inc.  All Rights Reserved", UI_CENTER|UI_SMALLFONT, color );
+		//UI_DrawString( 320, 428, "and you are welcome to redistribute it under certain conditions;", UI_CENTER|UI_SMALLFONT, color );
+		//UI_DrawString( 320, 444, "read COPYING for details.", UI_CENTER|UI_SMALLFONT, color );
                 
                 //Draw version.
 		color[0] = 0;
@@ -294,27 +289,26 @@ void UI_MainMenu( void ) {
 	int		style = UI_CENTER | UI_DROPSHADOW;
 
 	trap_Cvar_Set( "sv_killserver", "1" );
-        trap_Cvar_SetValue( "handicap", 100 ); //Reset handicap during server change, it must be ser per game
 
 	memset( &s_main, 0 ,sizeof(mainmenu_t) );
 	memset( &s_errorMessage, 0 ,sizeof(errorMessage_t) );
 
 	// com_errorMessage would need that too
 	MainMenu_Cache();
-	
+
 	trap_Cvar_VariableStringBuffer( "com_errorMessage", s_errorMessage.errorMessage, sizeof(s_errorMessage.errorMessage) );
 	if (strlen(s_errorMessage.errorMessage))
-	{	
+	{
 		s_errorMessage.menu.draw = Main_MenuDraw;
 		s_errorMessage.menu.key = ErrorMessage_Key;
 		s_errorMessage.menu.fullscreen = qtrue;
 		s_errorMessage.menu.wrapAround = qtrue;
-		s_errorMessage.menu.showlogo = qtrue;		
+		s_errorMessage.menu.showlogo = qtrue;
 
 		trap_Key_SetCatcher( KEYCATCH_UI );
 		uis.menusp = 0;
 		UI_PushMenu ( &s_errorMessage.menu );
-		
+
 		return;
 	}
 
@@ -329,7 +323,7 @@ void UI_MainMenu( void ) {
 	s_main.singleplayer.generic.x			= 320;
 	s_main.singleplayer.generic.y			= y;
 	s_main.singleplayer.generic.id			= ID_SINGLEPLAYER;
-	s_main.singleplayer.generic.callback	= Main_MenuEvent; 
+	s_main.singleplayer.generic.callback	= Main_MenuEvent;
 	s_main.singleplayer.string				= "SINGLE PLAYER";
 	s_main.singleplayer.color				= color_red;
 	s_main.singleplayer.style				= style;
@@ -340,7 +334,7 @@ void UI_MainMenu( void ) {
 	s_main.multiplayer.generic.x			= 320;
 	s_main.multiplayer.generic.y			= y;
 	s_main.multiplayer.generic.id			= ID_MULTIPLAYER;
-	s_main.multiplayer.generic.callback		= Main_MenuEvent; 
+	s_main.multiplayer.generic.callback		= Main_MenuEvent;
 	s_main.multiplayer.string				= "MULTIPLAYER";
 	s_main.multiplayer.color				= color_red;
 	s_main.multiplayer.style				= style;
@@ -351,7 +345,7 @@ void UI_MainMenu( void ) {
 	s_main.setup.generic.x					= 320;
 	s_main.setup.generic.y					= y;
 	s_main.setup.generic.id					= ID_SETUP;
-	s_main.setup.generic.callback			= Main_MenuEvent; 
+	s_main.setup.generic.callback			= Main_MenuEvent;
 	s_main.setup.string						= "SETUP";
 	s_main.setup.color						= color_red;
 	s_main.setup.style						= style;
@@ -362,46 +356,35 @@ void UI_MainMenu( void ) {
 	s_main.demos.generic.x					= 320;
 	s_main.demos.generic.y					= y;
 	s_main.demos.generic.id					= ID_DEMOS;
-	s_main.demos.generic.callback			= Main_MenuEvent; 
+	s_main.demos.generic.callback			= Main_MenuEvent;
 	s_main.demos.string						= "DEMOS";
 	s_main.demos.color						= color_red;
 	s_main.demos.style						= style;
 
-	/*y += MAIN_MENU_VERTICAL_SPACING;
+	y += MAIN_MENU_VERTICAL_SPACING;
 	s_main.cinematics.generic.type			= MTYPE_PTEXT;
 	s_main.cinematics.generic.flags			= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
 	s_main.cinematics.generic.x				= 320;
 	s_main.cinematics.generic.y				= y;
 	s_main.cinematics.generic.id			= ID_CINEMATICS;
-	s_main.cinematics.generic.callback		= Main_MenuEvent; 
+	s_main.cinematics.generic.callback		= Main_MenuEvent;
 	s_main.cinematics.string				= "CINEMATICS";
 	s_main.cinematics.color					= color_red;
-	s_main.cinematics.style					= style;*/
+	s_main.cinematics.style					= style;
 
-        y += MAIN_MENU_VERTICAL_SPACING;
-	s_main.challenges.generic.type			= MTYPE_PTEXT;
-	s_main.challenges.generic.flags			= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
-	s_main.challenges.generic.x				= 320;
-	s_main.challenges.generic.y				= y;
-	s_main.challenges.generic.id			= ID_CHALLENGES;
-	s_main.challenges.generic.callback		= Main_MenuEvent;
-	s_main.challenges.string				= "STATISTICS";
-	s_main.challenges.color					= color_red;
-	s_main.challenges.style					= style;
-
-	//if (UI_TeamArenaExists()) {
-	//	teamArena = qtrue;
-	//	y += MAIN_MENU_VERTICAL_SPACING;
-	//	s_main.teamArena.generic.type			= MTYPE_PTEXT;
-	//	s_main.teamArena.generic.flags			= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
-	//	s_main.teamArena.generic.x				= 320;
-	//	s_main.teamArena.generic.y				= y;
-	//	s_main.teamArena.generic.id				= ID_TEAMARENA;
-	//	s_main.teamArena.generic.callback		= Main_MenuEvent; 
-	//	s_main.teamArena.string					= "MISSION PACK";
-	//	s_main.teamArena.color					= color_red;
-	//	s_main.teamArena.style					= style;
-	//}
+	/*if (UI_TeamArenaExists()) {
+		teamArena = qtrue;
+		y += MAIN_MENU_VERTICAL_SPACING;
+		s_main.teamArena.generic.type			= MTYPE_PTEXT;
+		s_main.teamArena.generic.flags			= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+		s_main.teamArena.generic.x				= 320;
+		s_main.teamArena.generic.y				= y;
+		s_main.teamArena.generic.id				= ID_TEAMARENA;
+		s_main.teamArena.generic.callback		= Main_MenuEvent;
+		s_main.teamArena.string					= "TEAM ARENA";
+		s_main.teamArena.color					= color_red;
+		s_main.teamArena.style					= style;
+	}*/
 
 	y += MAIN_MENU_VERTICAL_SPACING;
 	s_main.mods.generic.type			= MTYPE_PTEXT;
@@ -409,7 +392,7 @@ void UI_MainMenu( void ) {
 	s_main.mods.generic.x				= 320;
 	s_main.mods.generic.y				= y;
 	s_main.mods.generic.id				= ID_MODS;
-	s_main.mods.generic.callback		= Main_MenuEvent; 
+	s_main.mods.generic.callback		= Main_MenuEvent;
 	s_main.mods.string					= "MODS";
 	s_main.mods.color					= color_red;
 	s_main.mods.style					= style;
@@ -420,7 +403,7 @@ void UI_MainMenu( void ) {
 	s_main.exit.generic.x					= 320;
 	s_main.exit.generic.y					= y;
 	s_main.exit.generic.id					= ID_EXIT;
-	s_main.exit.generic.callback			= Main_MenuEvent; 
+	s_main.exit.generic.callback			= Main_MenuEvent;
 	s_main.exit.string						= "EXIT";
 	s_main.exit.color						= color_red;
 	s_main.exit.style						= style;
@@ -429,16 +412,15 @@ void UI_MainMenu( void ) {
 	Menu_AddItem( &s_main.menu,	&s_main.multiplayer );
 	Menu_AddItem( &s_main.menu,	&s_main.setup );
 	Menu_AddItem( &s_main.menu,	&s_main.demos );
-	//Menu_AddItem( &s_main.menu,	&s_main.cinematics );
-        Menu_AddItem( &s_main.menu,	&s_main.challenges );
-	if (teamArena) {
+	Menu_AddItem( &s_main.menu,	&s_main.cinematics );
+	/*if (teamArena) {
 		Menu_AddItem( &s_main.menu,	&s_main.teamArena );
-	}
+	}*/
 	Menu_AddItem( &s_main.menu,	&s_main.mods );
-	Menu_AddItem( &s_main.menu,	&s_main.exit );             
+	Menu_AddItem( &s_main.menu,	&s_main.exit );
 
 	trap_Key_SetCatcher( KEYCATCH_UI );
 	uis.menusp = 0;
 	UI_PushMenu ( &s_main.menu );
-		
+
 }

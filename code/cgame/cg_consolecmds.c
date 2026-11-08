@@ -333,6 +333,7 @@ static void CG_Rules_f( void ) {
 	CG_Printf(" -movement:              %s\n", BG_MovementToString(cgs.movement));
 	CG_Printf(" -Smooth/additive jump:  %s\n", CG_OnOffStr(cgs.ratFlags & RAT_ADDITIVEJUMP));
 	CG_Printf(" -Ramp jump:             %s\n", CG_OnOffStr(cgs.ratFlags & RAT_RAMPJUMP));
+	CG_Printf(" -Autohop:               %s\n", CG_OnOffStr(cgs.ratFlags & RAT_AUTOHOP));
 	CG_Printf(" -Smooth stairs:         %s\n", CG_OnOffStr(cgs.ratFlags & RAT_SMOOTHSTAIRS));
 	CG_Printf(" -Crouch slide:          %s\n", (cgs.ratFlags & RAT_CROUCHSLIDE) ? 
 							((cgs.ratFlags & RAT_SLIDEMODE) ?

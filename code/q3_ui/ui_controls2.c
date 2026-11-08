@@ -31,10 +31,10 @@ CONTROLS MENU
 
 #include "ui_local.h"
 
-#define ART_BACK0			"menu/art_blueish/back_0"
-#define ART_BACK1			"menu/art_blueish/back_1"
-#define ART_FRAMEL			"menu/art_blueish/frame2_l"
-#define ART_FRAMER			"menu/art_blueish/frame1_r"
+#define ART_BACK0			"menu/art/back_0"
+#define ART_BACK1			"menu/art/back_1"
+#define ART_FRAMEL			"menu/art/frame2_l"
+#define ART_FRAMER			"menu/art/frame1_r"
 
 
 typedef struct {
@@ -262,10 +262,10 @@ static const char *autoswitch_items[] = {
 };
 
 // OLD
-//static vec4_t controls_binding_color  = {1.00f, 0.43f, 0.00f, 1.00f}; // bk: Win32 C4305
+static vec4_t controls_binding_color  = {1.00f, 0.43f, 0.00f, 1.00f}; // bk: Win32 C4305
 
 // New!
-static vec4_t controls_binding_color  = {0.58f, 0.70f, 0.81f, 1.00f};
+//static vec4_t controls_binding_color  = {0.58f, 0.70f, 0.81f, 1.00f};
 
 static bind_t g_bindings[] = 
 {
@@ -1478,19 +1478,19 @@ static void Controls_MenuInit( void )
 	s_controls.grapple.generic.callback  = Controls_ActionEvent;
 	s_controls.grapple.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.grapple.generic.id        = ID_WEAPON10;
-        
+
         s_controls.nailgun.generic.type	     = MTYPE_ACTION;
 	s_controls.nailgun.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.nailgun.generic.callback  = Controls_ActionEvent;
 	s_controls.nailgun.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.nailgun.generic.id        = ID_WEAPON11;
-        
+
         s_controls.proxmine.generic.type	     = MTYPE_ACTION;
 	s_controls.proxmine.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.proxmine.generic.callback  = Controls_ActionEvent;
 	s_controls.proxmine.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.proxmine.generic.id        = ID_WEAPON12;
-        
+
         s_controls.chaingun.generic.type	     = MTYPE_ACTION;
 	s_controls.chaingun.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.chaingun.generic.callback  = Controls_ActionEvent;
@@ -1643,7 +1643,7 @@ static void Controls_MenuInit( void )
 	s_controls.chat4.generic.callback  = Controls_ActionEvent;
 	s_controls.chat4.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.chat4.generic.id        = ID_CHAT4;
-        
+
         s_controls.voip_talk.generic.type	   = MTYPE_ACTION;
 	s_controls.voip_talk.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.voip_talk.generic.callback  = Controls_ActionEvent;

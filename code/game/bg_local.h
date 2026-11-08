@@ -45,6 +45,7 @@ typedef struct {
 	qboolean	walking;
 	qboolean	groundPlane;
 	trace_t		groundTrace;
+	qboolean	ladder;
 
 	float		impactSpeed;
 

@@ -36,12 +36,14 @@ const float	pm_duckScale = 0.25f;
 const float	pm_swimScale = 0.50;
 const float	pm_swimScaleFast = 0.75f;
 const float	pm_wadeScale = 0.70f;
+const float	pm_ladderScale = 0.50f;
 
 const float	pm_accelerate = 10.0f;
 const float	pm_airaccelerate = 1.0f;
 const float	pm_duckaccelerate = 10.0f;
 const float	pm_wateraccelerate = 4.0f;
 const float	pm_flyaccelerate = 8.0f;
+const float	pm_ladderAccelerate = 3000;
 
 const float	pm_rat_accelerate = 14.0f;
 const float	pm_rat_airaccelerate = 2.4f;
@@ -59,7 +61,7 @@ const float	pm_friction = 6.0f;
 const float	pm_waterfriction = 1.0f;
 const float	pm_flightfriction = 3.0f;
 const float	pm_spectatorfriction = 5.0f;
-
+const float	pm_ladderfriction = 3000;
 
 const int crouchGraceTime = 300;
 const int crouchGoGraceTime = 400;
@@ -271,6 +273,11 @@ static void PM_Friction( void ) {
 		drop += speed*pm_spectatorfriction*pml.frametime;
 	}
 
+	// apply ladder friction
+	if ( pml.ladder ) {
+		drop += speed*pm_ladderfriction*pml.frametime;
+	}
+
 	// scale the velocity
 	newspeed = speed - drop;
 	if (newspeed < 0) {
@@ -429,7 +436,7 @@ static qboolean PM_CheckJump( void ) {
 
 
 	// must wait for jump to be released
-	if ( pm->ps->pm_flags & PMF_JUMP_HELD ) {
+	if ( (pm->ps->pm_flags & PMF_JUMP_HELD) && !(pm->pmove_ratflags & RAT_AUTOHOP) ) {
 		// clear upmove so cmdscale doesn't lower running speed
 		pm->cmd.upmove = 0;
 		return qfalse;
@@ -2230,6 +2237,88 @@ void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd ) {
 
 }
 
+/*
+ = *==================
+ PM_LadderMove()
+ by: Calrathan [Arthur Tomlin]
+
+ Right now all I know is that this works for VERTICAL ladders.
+ Ladders with angles on them (urban2 for AQ2) haven't been tested.
+ ===================
+ */
+static void PM_LadderMove( void ) {
+	int i;
+	vec3_t wishvel;
+	float wishspeed;
+	vec3_t wishdir;
+	float scale;
+	float vel;
+
+	PM_Friction ();
+
+	scale = PM_CmdScale( &pm->cmd );
+
+	// user intentions [what the user is attempting to do]
+	if ( !scale ) {
+		wishvel[0] = 0;
+		wishvel[1] = 0;
+		wishvel[2] = 0;
+	}
+	else {   // if they're trying to move... lets calculate it
+		for (i=0 ; i<3 ; i++)
+			wishvel[i] = scale * pml.forward[i]*pm->cmd.forwardmove +
+			scale * pml.right[i]*pm->cmd.rightmove;
+		wishvel[2] += scale * pm->cmd.upmove;
+	}
+
+	VectorCopy (wishvel, wishdir);
+	wishspeed = VectorNormalize(wishdir);
+
+	if ( wishspeed > pm->ps->speed * pm_ladderScale ) {
+		wishspeed = pm->ps->speed * pm_ladderScale;
+	}
+
+	PM_Accelerate (wishdir, wishspeed, pm_ladderAccelerate);
+
+	// This SHOULD help us with sloped ladders, but it remains untested.
+	if ( pml.groundPlane && DotProduct( pm->ps->velocity,
+		pml.groundTrace.plane.normal ) < 0 ) {
+		vel = VectorLength(pm->ps->velocity);
+	// slide along the ground plane [the ladder section under our feet]
+	PM_ClipVelocity (pm->ps->velocity, pml.groundTrace.plane.normal,
+					 pm->ps->velocity, OVERCLIP );
+
+	VectorNormalize(pm->ps->velocity);
+	VectorScale(pm->ps->velocity, vel, pm->ps->velocity);
+		}
+
+		PM_SlideMove( qfalse ); // move without gravity
+}
+
+
+/*
+ = *============
+ CheckLadder [ ARTHUR TOMLIN ]
+ =============
+ */
+void CheckLadder( void )
+{
+	vec3_t flatforward,spot;
+	trace_t trace;
+	pml.ladder = qfalse;
+	// check for ladder
+	flatforward[0] = pml.forward[0];
+	flatforward[1] = pml.forward[1];
+	flatforward[2] = 0;
+	VectorNormalize (flatforward);
+	VectorMA (pm->ps->origin, 1, flatforward, spot);
+	pm->trace (&trace, pm->ps->origin, pm->mins, pm->maxs, spot,
+			   pm->ps->clientNum, MASK_PLAYERSOLID);
+
+	if ((trace.fraction < 1) && (trace.surfaceFlags & SURF_LADDER))
+		pml.ladder = qtrue;
+
+}
 
 /*
 ================
@@ -2376,6 +2465,7 @@ void PmoveSingle (pmove_t *pmove) {
 	}
 
 	PM_DropTimers();
+	CheckLadder();  // ARTHUR TOMLIN check and see if they're on a ladder
 
 	if (pm->ps->stats[STAT_JUMPTIME] > 0) {
 		pm->ps->stats[STAT_JUMPTIME] -= pml.msec;
@@ -2419,6 +2509,8 @@ void PmoveSingle (pmove_t *pmove) {
 	} else if ( pm->waterlevel > 1 ) {
 		// swimming
 		PM_WaterMove();
+	} else if (pml.ladder) {
+		PM_LadderMove();
 	} else if ( pml.walking ) {
 		// walking on ground
 		PM_WalkMove();

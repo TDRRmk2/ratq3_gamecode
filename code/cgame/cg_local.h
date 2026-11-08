@@ -1779,7 +1779,7 @@ extern vmCvar_t			cg_ratPlasmaTrailAlpha;
 extern vmCvar_t			cg_ratPlasmaTrailStep;
 extern vmCvar_t			cg_ratPlasmaTrailTime;
 extern vmCvar_t			cg_ratPlasmaExplosion;
-extern vmCvar_t			cg_rocketStyle;
+//extern vmCvar_t			cg_rocketStyle;
 extern vmCvar_t			cg_ratRocketTrail;
 extern vmCvar_t			cg_ratRocketTrailAlpha;
 extern vmCvar_t			cg_ratRocketTrailRadius;
@@ -1948,7 +1948,7 @@ extern	vmCvar_t		cg_taunts;
 extern	vmCvar_t		cg_noProjectileTrail;
 extern	vmCvar_t		cg_oldRail;
 extern	vmCvar_t		cg_oldRocket;
-extern	vmCvar_t		cg_oldMachinegun;
+//extern	vmCvar_t		cg_oldMachinegun;
 
 extern	vmCvar_t		cg_leiEnhancement;			// LEILEI'S LINE!
 extern	vmCvar_t		cg_leiGoreNoise;			// LEILEI'S LINE!

@@ -1679,7 +1679,7 @@ $(B)/baseq3/cgame$(ARCH).$(SHLIBEXT): $(Q3CGOBJ)
 
 $(B)/baseq3/vm/cgame.qvm: $(Q3CGVMOBJ) $(CGDIR)/cg_syscalls.asm $(Q3ASM)
 	$(echo_cmd) "Q3ASM $@"
-	$(Q)$(Q3ASM) -o $@ $(Q3CGVMOBJ) $(CGDIR)/cg_syscalls.asm
+	$(Q)$(Q3ASM) -vq3 -o $@ $(Q3CGVMOBJ) $(CGDIR)/cg_syscalls.asm
 
 #############################################################################
 ## MISSIONPACK CGAME
@@ -1725,7 +1725,7 @@ $(B)/missionpack/cgame$(ARCH).$(SHLIBEXT): $(MPCGOBJ)
 
 $(B)/missionpack/vm/cgame.qvm: $(MPCGVMOBJ) $(CGDIR)/cg_syscalls.asm $(Q3ASM)
 	$(echo_cmd) "Q3ASM $@"
-	$(Q)$(Q3ASM) -o $@ $(MPCGVMOBJ) $(CGDIR)/cg_syscalls.asm
+	$(Q)$(Q3ASM) -vq3 -o $@ $(MPCGVMOBJ) $(CGDIR)/cg_syscalls.asm
 
 
 
@@ -1787,7 +1787,7 @@ $(B)/baseq3/qagame$(ARCH).$(SHLIBEXT): $(Q3GOBJ)
 
 $(B)/baseq3/vm/qagame.qvm: $(Q3GVMOBJ) $(GDIR)/g_syscalls.asm $(Q3ASM)
 	$(echo_cmd) "Q3ASM $@"
-	$(Q)$(Q3ASM) -o $@ $(Q3GVMOBJ) $(GDIR)/g_syscalls.asm
+	$(Q)$(Q3ASM) -vq3 -o $@ $(Q3GVMOBJ) $(GDIR)/g_syscalls.asm
 
 #############################################################################
 ## MISSIONPACK GAME
@@ -1847,7 +1847,7 @@ $(B)/missionpack/qagame$(ARCH).$(SHLIBEXT): $(MPGOBJ)
 
 $(B)/missionpack/vm/qagame.qvm: $(MPGVMOBJ) $(GDIR)/g_syscalls.asm $(Q3ASM)
 	$(echo_cmd) "Q3ASM $@"
-	$(Q)$(Q3ASM) -o $@ $(MPGVMOBJ) $(GDIR)/g_syscalls.asm
+	$(Q)$(Q3ASM) -vq3 -o $@ $(MPGVMOBJ) $(GDIR)/g_syscalls.asm
 
 
 
@@ -1922,7 +1922,7 @@ $(B)/baseq3/ui$(ARCH).$(SHLIBEXT): $(Q3UIOBJ)
 
 $(B)/baseq3/vm/ui.qvm: $(Q3UIVMOBJ) $(UIDIR)/ui_syscalls.asm $(Q3ASM)
 	$(echo_cmd) "Q3ASM $@"
-	$(Q)$(Q3ASM) -o $@ $(Q3UIVMOBJ) $(UIDIR)/ui_syscalls.asm
+	$(Q)$(Q3ASM) -vq3 -o $@ $(Q3UIVMOBJ) $(UIDIR)/ui_syscalls.asm
 
 #############################################################################
 ## MISSIONPACK UI
@@ -1950,7 +1950,7 @@ $(B)/missionpack/ui$(ARCH).$(SHLIBEXT): $(MPUIOBJ)
 
 $(B)/missionpack/vm/ui.qvm: $(MPUIVMOBJ) $(UIDIR)/ui_syscalls.asm $(Q3ASM)
 	$(echo_cmd) "Q3ASM $@"
-	$(Q)$(Q3ASM) -o $@ $(MPUIVMOBJ) $(UIDIR)/ui_syscalls.asm
+	$(Q)$(Q3ASM) -vq3 -o $@ $(MPUIVMOBJ) $(UIDIR)/ui_syscalls.asm
 
 
 

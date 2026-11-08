@@ -1204,13 +1204,13 @@ static void CG_GrenadeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 }
 
 const char *CG_GetMachinegunModel(gitem_t *item) {
-	if (item->giType == IT_WEAPON && item->giTag == WP_MACHINEGUN && cg_oldMachinegun.integer) {
+	/*if (item->giType == IT_WEAPON && item->giTag == WP_MACHINEGUN && cg_oldMachinegun.integer) {
 		const char *oldMg = "models/weapons2/oldmachine/machinegun.md3";
 		qhandle_t model = trap_R_RegisterModel(oldMg);
 		if (model != 0) {
 			return oldMg;
 		}
-	}
+	}*/
 
 	return item->world_model[0];
 }
@@ -1393,11 +1393,11 @@ void CG_RegisterWeapon( int weaponNum ) {
 		break;
 
 	case WP_ROCKET_LAUNCHER:
-		if (cg_rocketStyle.integer > 0 && cg_rocketStyle.integer < 5) {
-			weaponInfo->missileModel = trap_R_RegisterModel( va("models/ammo/rocket/rocket%i/rocket.md3", cg_rocketStyle.integer) );
-		} else {
-			weaponInfo->missileModel = trap_R_RegisterModel( "models/ammo/rocket/rocket.md3" );
-		}
+		//if (cg_rocketStyle.integer > 0 && cg_rocketStyle.integer < 5) {
+		//	weaponInfo->missileModel = trap_R_RegisterModel( va("models/ammo/rocket/rocket%i/rocket.md3", cg_rocketStyle.integer) );
+		//} else {
+		weaponInfo->missileModel = trap_R_RegisterModel( "models/ammo/rocket/rocket.md3" );
+		//}
 		weaponInfo->missileSound = trap_S_RegisterSound( "sound/weapons/rocket/rockfly.wav", qfalse );
 		weaponInfo->missileTrailFunc = CG_RocketTrail;
 		weaponInfo->missileDlight = 200;

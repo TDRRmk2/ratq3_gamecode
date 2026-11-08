@@ -259,6 +259,7 @@ vmCvar_t        g_crouchSlide;
 vmCvar_t        g_slideMode;
 vmCvar_t        g_rampJump;
 vmCvar_t        g_additiveJump;
+vmCvar_t        g_autoHop;
 vmCvar_t        g_fastSwim;
 vmCvar_t        g_lavaDamage;
 vmCvar_t        g_slimeDamage;
@@ -660,6 +661,7 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &g_slideMode,   "g_slideMode", "0", CVAR_ARCHIVE, 0, qtrue },
 	{ &g_rampJump,     "g_rampJump", "0", CVAR_ARCHIVE, 0, qtrue },
 	{ &g_additiveJump,     "g_additiveJump", "1", CVAR_ARCHIVE, 0, qtrue },
+	{ &g_autoHop,     "g_autoHop", "0", CVAR_ARCHIVE, 0, qtrue },
 	{ &g_fastSwim,   "g_fastSwim", "1", CVAR_ARCHIVE, 0, qtrue },
 	{ &g_lavaDamage,     "g_lavaDamage", "10", CVAR_ARCHIVE, 0, qfalse },
 	{ &g_slimeDamage,     "g_slimeDamage", "4", CVAR_ARCHIVE, 0, qfalse },
@@ -1646,6 +1648,9 @@ void G_UpdateRatFlags( void ) {
 		rflags |= RAT_RAMPJUMP;
 	}
 
+	if (g_autoHop.integer) {
+		rflags |= RAT_AUTOHOP;
+	}
 
 	if (g_allowForcedModels.integer) {
 		rflags |= RAT_ALLOWFORCEDMODELS;
@@ -1816,6 +1821,7 @@ void G_UpdateCvars( void ) {
 						|| cv->vmCvar == &g_fastWeapons
 						// || cv->vmCvar == &g_crouchSlide
 						|| cv->vmCvar == &g_rampJump
+						|| cv->vmCvar == &g_autoHop
 						|| cv->vmCvar == &g_allowForcedModels
 						|| cv->vmCvar == &g_friendsWallHack
 						|| cv->vmCvar == &g_specShowZoom
