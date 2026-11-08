@@ -1,5 +1,18 @@
-# RatArena gamecode
+# RatArena-q3 gamecode
+RatArena-q3 is a fork of RatArena specifically for Quake 3 Arena.
+The bulk of the changes are simply for the mod to work properly with Quake 3 Arena, but there's some changes that may prove interesting/useful:
+- `g_autohop`: if enabled, players will keep jumping as long as the jump key is held.
+- Ladder support from EntityPlus. Helps with Generations Arena maps and likely others.
+- Added CPMA green armor assets, mainly for CPMA map support. (RatArena already had support for the entity and some simple assets)
+- Skin forcing is now disabled by default.
+- Removed some CVARs that were not as relevant for Q3A (`cg_rocketstyle` and `cg_oldMachineGun`).
+- Now compiled for qvm v1, may help run on some other non-ioq3 ports.
 
+Releases can be found here: https://github.com/TDRRmk2/ratarena-q3_release
+
+The original project can be found here: https://github.com/rdntcntrl/ratoa_gamecode
+
+# Original readme
 ![RatArena Logo](ratmod_logo.svg)
 
 RatArena (or Ratmod) is a mod for OpenArena for both competitive and casual gameplay.
