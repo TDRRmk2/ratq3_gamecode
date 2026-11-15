@@ -405,6 +405,7 @@ vmCvar_t	cg_leiSuperGoreyAwesome;		// ANOTHER LEILEI LINE!!!
 vmCvar_t	cg_oldPlasma;
 vmCvar_t	cg_trueLightning;
 vmCvar_t        cg_music;
+vmCvar_t		cg_userMusCount;
 vmCvar_t        cg_weaponOrder;
 
 
@@ -877,7 +878,8 @@ static cvarTable_t cvarTable[] = { // bk001129
 //	{ &cg_plOut, "cg_plOut", "0", CVAR_USERINFO | CVAR_CHEAT },
 //unlagged - client options
 	{ &cg_trueLightning, "cg_trueLightning", "1.0", CVAR_ARCHIVE},
-        { &cg_music, "cg_music", "", CVAR_ARCHIVE},
+	{ &cg_music, "cg_music", "1", CVAR_ARCHIVE},
+	{ &cg_userMusCount, "cg_userMusCount", "0", CVAR_ARCHIVE | CVAR_ROM},
 //	{ &cg_pmove_fixed, "cg_pmove_fixed", "0", CVAR_USERINFO | CVAR_ARCHIVE }
 
 	{ &cg_fragmsgsize, "cg_fragmsgsize", "0.6", CVAR_ARCHIVE},
@@ -3067,6 +3069,40 @@ const char *CG_ConfigString( int index ) {
 
 //==================================================================
 
+static qboolean FileExists (const char *fileName)
+{
+	int file;
+	trap_FS_FOpenFile(fileName, &file, FS_READ);
+	if(file)
+	{
+		trap_FS_FCloseFile(file);
+		return qtrue;
+	}
+
+	return qfalse;
+}
+
+#define FMT_STRING_USERMUS "usermusic/%i.ogg"
+
+static void InitMusicCount ()
+{
+	int i;
+
+	if(cg_userMusCount.integer && FileExists(va(FMT_STRING_USERMUS, cg_userMusCount.integer - 1)))
+	{
+		if(!FileExists(va(FMT_STRING_USERMUS, cg_userMusCount.integer)))
+			return;
+	}
+
+	for(i = 0; i < INT_MAX; i++)
+	{
+		if(!FileExists(va(FMT_STRING_USERMUS, i)))
+			break;
+	}
+
+	CG_Cvar_SetAndUpdate("cg_userMusCount", va("%i", i));
+}
+
 /*
 ======================
 CG_StartMusic
@@ -3077,16 +3113,37 @@ void CG_StartMusic( void ) {
 	char	*s;
 	char	parm1[MAX_QPATH], parm2[MAX_QPATH];
 
-	// start the background music
-	if ( *cg_music.string && Q_stricmp( cg_music.string, "none" ) ) {
-		s = (char *)cg_music.string;
-	} else {
-		s = (char *)CG_ConfigString( CS_MUSIC );
+	if(cg_music.integer <= 0)
+		return;
+
+	InitMusicCount();
+
+	s = (char *)CG_ConfigString( CS_MUSIC );
 	Q_strncpyz( parm1, COM_Parse( &s ), sizeof( parm1 ) );
 	Q_strncpyz( parm2, COM_Parse( &s ), sizeof( parm2 ) );
 
-	trap_S_StartBackgroundTrack( parm1, parm2 );
-        }
+	if( cg_userMusCount.integer && (((cg_music.integer == 2) && !strlen(parm1)) || (cg_music.integer >= 3)) )
+	{
+		int randSeed, trackNum;
+		qtime_t time;
+
+		trap_RealTime(&time);
+		randSeed = time.tm_sec + (time.tm_min * 60) + (time.tm_hour * 3600) + (time.tm_mday *  (3600 * 24));
+		trackNum = Q_rand(&randSeed);
+
+		if(trackNum < 0)
+			trackNum = -trackNum;
+
+		trackNum %= cg_userMusCount.integer;
+
+		trap_S_StartBackgroundTrack(va("usermusic/%i", trackNum), NULL);
+
+		return;
+	}
+	else
+	{
+		trap_S_StartBackgroundTrack( parm1, parm2 );
+	}
 }
 #ifdef MISSIONPACK
 char *CG_GetMenuBuffer(const char *filename) {
